@@ -179,7 +179,7 @@ $currentLang = $_COOKIE['lang'] ?? 'vi';
                     <strong><?= manager_h($manager['username'] ?? 'manager') ?></strong>
                     <small>Manager</small>
                 </div>
-                <i class="bi bi-chevron-down"></i>
+                
             </div>
         </aside>
 
