@@ -1,0 +1,133 @@
+
+
+.notifications-header h1{
+    font-size:36px;
+    margin-bottom:8px;
+}
+
+.notifications-header p{
+    color:#64748b;
+}
+
+.notifications-list{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.notification-card{
+    background:white;
+    border-radius:20px;
+    padding:25px;
+
+    display:flex;
+    align-items:flex-start;
+    gap:20px;
+
+    border:1px solid #e5e7eb;
+
+    transition:.2s;
+}
+
+.notification-card:hover{
+    transform:translateY(-2px);
+
+    box-shadow:
+    0 4px 12px rgba(0,0,0,.05);
+}
+
+.notification-content{
+    flex:1;
+}
+
+.notification-content h3{
+    font-size:22px;
+    margin-bottom:10px;
+}
+
+.notification-content p{
+    color:#64748b;
+    margin-bottom:12px;
+}
+
+.notification-time{
+    color:#94a3b8;
+    font-size:14px;
+}
+
+.dot{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    display:block;
+    margin-top:8px;
+}
+
+.blue{
+    background:#2563eb;
+}
+
+.orange{
+    background:#f97316;
+}
+
+.green{
+    background:#16a34a;
+}
+
+
+.notification-toolbar{
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:20px;
+}
+
+#notificationFilter{
+    padding:10px 14px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    background:#fff;
+    cursor:pointer;
+}
+
+/* =========================
+   DARK MODE NOTIFICATIONS
+========================= */
+
+.notifications-header h1{
+    color: var(--text-main);
+}
+
+.notifications-header p{
+    color: var(--text-sub);
+}
+
+.notification-card{
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+}
+
+.notification-content h4,
+.notification-content h3{
+    color: var(--text-main);
+}
+
+.notification-content p{
+    color: var(--text-sub);
+}
+
+.notification-time{
+    color: var(--text-sub);
+}
+
+#notificationFilter{
+    background: var(--bg-input);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+}
+
+/* Option trong select */
+#notificationFilter option{
+    background: var(--bg-card);
+    color: var(--text-main);
+}

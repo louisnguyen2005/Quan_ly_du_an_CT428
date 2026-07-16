@@ -1,0 +1,316 @@
+/* --- Khung Layout chính --- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.manag {
+    margin-top: 7rem; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.toolbar {
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; 
+    align-items: center;          
+    gap: 15px;
+}
+
+.filter-box select {
+    padding: 12px 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: white;
+    outline: none;
+}
+
+.btn-add {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* --- Grid chia 3 cột đều nhau --- */
+.user-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+/* --- Định hình hộp User Card --- */
+.user-card {
+    background-color: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 20px;
+    position: relative;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 240px;
+}
+
+/* Chấm tròn báo trạng thái góc phải */
+.status-dot {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+/* --- Cấu trúc hàng ngang: Avatar phía trái - Chữ phía phải --- */
+.card-main-content {
+    display: flex;
+    align-items: flex-start; /* Giữ avatar đỉnh góc trái */
+    gap: 16px; /* Khoảng cách từ Avatar tới khối chữ */
+    width: 100%;
+}
+
+/* Avatar tròn sát lề trái */
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #f1f5f9;
+    color: #334155;
+    font-weight: 700;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e2e8f0;
+    flex-shrink: 0; /* Không cho phép avatar bị bóp méo */
+}
+
+/* Khối chữ căn trái toàn bộ */
+.user-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Ép mọi dòng chữ bám sát lề trái */
+    width: 100%;
+    text-align: left;
+}
+
+.user-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 2px 0;
+}
+
+.job-title {
+    font-size: 13px;
+    color: #64748b;
+    margin: 0 0 8px 0;
+}
+
+/* Cụm Badge xếp ngang ngay dưới Tên */
+.badge-group {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+
+.badge {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badge-admin { background-color: #f3e8ff; color: #9333ea; }
+.badge-manager { background-color: #dbeafe; color: #2563eb; }
+.badge-staff { background-color: #e0f2fe; color: #0369a1; }
+.badge-green { background-color: #dcfce7; color: #166534; }
+.badge-red { background-color: #fee2e2; color: #991b1b; }
+
+.status-active { background-color: #22c55e; }
+.status-inactive { background-color: #ef4444; }
+
+/* Thông tin liên hệ căn lề trái dưới Badge */
+.card-body-info {
+    width: 100%;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 10px;
+    margin-bottom: 10px;
+}
+
+.contact-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 6px;
+}
+
+.contact-info i {
+    width: 14px;
+    text-align: center;
+    color: #94a3b8;
+}
+
+/* --- Khối nút bấm dưới đáy --- */
+.card-footer {
+    display: flex;
+    gap: 8px;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 12px;
+    width: 100%;
+}
+
+.btn-action {
+    border: none;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    text-decoration: none;
+}
+
+.btn-edit { flex: 2; background-color: #f1f5f9; color: #334155; }
+.btn-lock { flex: 2; background-color: #fff7ed; color: #ea580c; }
+.btn-delete { flex: 1; background-color: #fef2f2; color: #dc2626; }
+.btn-action[disabled] { opacity: 0.5; cursor: not-allowed; }
+
+/* --- Responsive Layout --- */
+@media (max-width: 1024px) {
+    .user-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+    .user-grid { grid-template-columns: 1fr; }
+}
+
+
+
+/* --- PHẦN CHÂN MODAL (Chứa 2 nút bấm) --- */
+.modal-footer {
+    display: flex;
+    justify-content: flex-end; /* Đẩy cả 2 nút về phía bên phải */
+    gap: 12px;                 /* Khoảng cách giữa nút Hủy và nút Thêm */
+    margin-top: 24px;          /* Khoảng cách từ ô nhập liệu cuối cùng xuống hàng nút */
+    border-top: 1px solid #f1f5f9; /* Đường gạch kẻ ngang mờ phân cách */
+    padding-top: 16px;
+}
+
+/* --- ĐỊNH DẠNG CHUNG CHO CẢ 2 NÚT --- */
+.modal-footer button {
+    padding: 10px 20px;
+    border-radius: 6px;        /* Bo góc nhẹ cho nút hiện đại */
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;              /* Khử đường viền mặc định xấu xí */
+    outline: none;
+    transition: all 0.2s ease; /* Tạo hiệu ứng mượt mà khi hover */
+}
+
+/* --- NÚT HỦY (.btn-cancel) --- */
+.btn-cancel {
+    background-color: #f1f5f9; /* Màu nền xám nhạt tinh tế */
+    color: #475569;            /* Màu chữ xám đậm */
+}
+
+.btn-cancel:hover {
+    background-color: #e2e8f0; /* Tối màu hơn một chút khi di chuột vào */
+    color: #1e293b;
+}
+
+/* --- NÚT THÊM (.btn-submit) --- */
+.btn-submit {
+    background-color: #2563eb; /* Màu nền xanh công nghệ (Blue Accent) */
+    color: #ffffff;            /* Chữ màu trắng nổi bật */
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2); /* Đổ bóng nhẹ cho nút chính */
+}
+
+.btn-submit:hover {
+    background-color: #1d4ed8; /* Màu xanh đậm hơn khi hover */
+    box-shadow: 0 4px 6px rgba(29, 78, 216, 0.3); /* Bóng đổ đậm hơn tạo hiệu ứng nổi lên */
+}
+
+/* --- Hiệu ứng khi click chuột (Active) cho cả 2 nút --- */
+.modal-footer button:active {
+    transform: scale(0.97);    /* Nút hơi lún xuống nhẹ tạo cảm giác thật khi bấm */
+}
+
+.badge-admin {
+    background: #f3e8ff;
+    color: #9333ea !important;
+}
+
+.badge-manager {
+    background: #dbeafe;
+    color: #2563eb !important;
+}
+
+.badge-staff {
+    background: #e0f2fe;
+    color: #0369a1 !important;
+}
+
+.badge-green {
+    background: #dcfce7;
+    color: #166534 !important;
+}
+
+.badge-red {
+    background: #fee2e2;
+    color: #991b1b !important;
+}
+
+/* USER STATUS + HARD DELETE FIX UI */
+.user-card-locked{
+    opacity: .92;
+    background: #f8fafc;
+}
+
+.user-card-locked .user-name,
+.user-card-locked .job-title,
+.user-card-locked .contact-info{
+    color: #94a3b8;
+}
+
+.user-card-locked .btn-edit[disabled],
+.user-card-locked .btn-delete[disabled]{
+    opacity: .55;
+    filter: grayscale(.25);
+}
+
+.btn-lock{
+    white-space: nowrap;
+}
+
+body.dark-mode .user-card-locked{
+    background: #111827;
+    opacity: 1;
+}
+
+body.dark-mode .user-card-locked .user-name,
+body.dark-mode .user-card-locked .job-title,
+body.dark-mode .user-card-locked .contact-info{
+    color: var(--text-sub) !important;
+}
