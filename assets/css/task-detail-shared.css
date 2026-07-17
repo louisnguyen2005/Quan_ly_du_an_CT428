@@ -1,0 +1,273 @@
+/*
+ * CSS dùng chung cho khối "chi tiết nhiệm vụ" (tiêu đề, lưới thông tin, badge trạng thái/ưu
+ * tiên, khung mô tả, khu vực bình luận) - để modal chi tiết task bên Staff và bên Manager
+ * (views/manager/tasks.php) luôn nhìn giống hệt nhau, chỉ sửa 1 chỗ khi cần đổi giao diện.
+ *
+ * File này được load bởi:
+ * - views/dashboard/staff.php (modal #staffTaskModal)
+ *
+ * Class gốc lấy từ assets/css/manager_crud.css (không đụng tới file đó để tránh ảnh hưởng
+ * các trang khác của Manager).
+ */
+
+.task-detail-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 20px;
+    line-height: 1.4;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.task-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+}
+
+.task-info-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 14px 16px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+}
+
+.task-info-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.task-info-label i {
+    color: #2563eb;
+}
+
+.task-info-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.task-section {
+    margin-top: 20px;
+}
+
+.task-section h3 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 12px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.task-detail-box {
+    min-height: 60px;
+    padding: 14px 16px;
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    color: #334155;
+    line-height: 1.6;
+    font-size: 14px;
+    white-space: pre-wrap;
+}
+
+/*==================== Badge trạng thái / ưu tiên ====================*/
+
+.badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* Trạng thái - copy đúng màu .badge-pill của Manager (manager_crud.css) để 2 bên khớp nhau. */
+.badge-pill.muted { background: #f1f5f9; color: #475569; }
+.badge-pill.in-progress { background: #dbeafe; color: #2563eb; }
+.badge-pill.pending-approval { background: #fef3c7; color: #d97706; }
+.badge-pill.completed { background: #dcfce7; color: #15803d; }
+
+/* Trạng thái DỰ ÁN "Lập kế hoạch" (Planning) - dùng trong modal chi tiết dự án bên Staff. */
+.badge-pill.planning { background: #e0f2fe; color: #0369a1; }
+
+/* "Bị từ chối" chỉ có ở Staff, Manager không có trạng thái này nên tự đặt màu đỏ cảnh báo. */
+.badge-pill.danger { background: #fee2e2; color: #dc2626; }
+
+/* Độ ưu tiên - copy đúng màu .badge-pill.high/.medium/.low của Manager. */
+.badge-pill.high { background: #fee2e2; color: #dc2626; }
+.badge-pill.medium { background: #fef3c7; color: #d97706; }
+.badge-pill.low { background: #dcfce7; color: #15803d; }
+
+/* Manager hiện chưa có style riêng cho "Khẩn cấp" (Critical) - tạm thêm 1 tông đỏ đậm hơn High
+   để phân biệt, xem đề xuất thêm style này cho cả Manager ở phần tổng kết. */
+.badge-pill.critical { background: #fecaca; color: #b91c1c; }
+
+/*==================== Trao đổi (comment thread) ====================*/
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.comment-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.comment-count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: #2563eb;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-height: 280px;
+    overflow-y: auto;
+    margin: 14px 0;
+    padding: 4px 2px;
+}
+
+.comment-empty {
+    padding: 28px 16px;
+    border: 2px dashed #dbe2ea;
+    border-radius: 12px;
+    text-align: center;
+    color: #94a3b8;
+}
+
+.comment-empty i {
+    font-size: 32px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.comment-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.comment-item.own {
+    justify-content: flex-end;
+}
+
+.comment-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #2563eb;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.comment-content {
+    max-width: 75%;
+}
+
+.comment-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+.comment-meta strong {
+    color: #0f172a;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.comment-meta span {
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.comment-item.own .comment-meta {
+    justify-content: flex-end;
+}
+
+.comment-bubble {
+    background: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 10px 14px;
+    line-height: 1.5;
+    color: #334155;
+    font-size: 14px;
+    word-break: break-word;
+}
+
+.comment-item.own .comment-bubble {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+}
+
+.comment-input {
+    margin-top: 12px;
+}
+
+.comment-input textarea {
+    width: 100%;
+    min-height: 90px;
+    padding: 12px 14px;
+    resize: vertical;
+    border: 1px solid #dbe2ea;
+    border-radius: 12px;
+    background: #f8fafc;
+    color: #334155;
+    font-size: 14px;
+}
+
+.comment-input textarea:focus {
+    outline: none;
+    background: #fff;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.comment-action {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+}
+
+@media (max-width: 720px) {
+    .task-detail-grid {
+        grid-template-columns: 1fr;
+    }
+}

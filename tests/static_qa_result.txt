@@ -1,0 +1,9 @@
+PASS CSRF meta/token
+PASS RBAC backend
+PASS JWT
+PASS Password hashing
+PASS Session regeneration
+PASS Prepared statements
+PASS XSS escaping
+
+STATIC QA PASSED
