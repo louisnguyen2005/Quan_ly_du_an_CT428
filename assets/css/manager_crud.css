@@ -828,6 +828,7 @@
 }
 
 .task-detail-grid {
+  margin-top: 20px;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 18px;
@@ -2228,4 +2229,64 @@ body.dark-mode .manager-modal input[type="file"] {
   background: #0f172a;
   border-color: #334155;
   color: #e5e7eb;
+}
+
+.pending-stat-card {
+  width: 280px;
+  min-height: 140px;
+  padding: 20px;
+  border-radius: 18px;
+}
+
+/*=============== Pending Approval Stat Card ===============*/
+
+.pending-stat-card {
+  width: 300px;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 22px 24px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  border-left: 6px solid #f59e0b;
+  margin-bottom: 28px;
+}
+
+.pending-stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pending-stat-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/*================ Pending Approval =================*/
+
+.pending-table-card {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+}
+
+.pending-table-header {
+  padding: 24px 28px;
+  border-bottom: 1px solid #e2e8f0;
+  background: linear-gradient(to right, #fff7ed, #ffffff);
+}
+
+.pending-table-info h3 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.pending-table-info p {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.6;
 }
