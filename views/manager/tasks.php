@@ -21,6 +21,26 @@ $tasksByProject = [];
 foreach ($tasks as $t) {
     $tasksByProject[$t['project_id']][] = $t;
 }
+$projectMembers = [];
+$stmt = $pdo->query("
+    SELECT
+        pm.project_id,
+        u.user_id,
+        u.username
+    FROM project_members pm
+    JOIN users u ON u.user_id = pm.user_id
+    JOIN roles r ON r.role_id = u.role_id
+    WHERE
+        r.role_code = 'STAFF'
+        AND u.is_deleted = 0
+    ORDER BY u.username
+");
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $projectMembers[$row['project_id']][] = [
+        'user_id' => $row['user_id'],
+        'username' => $row['username']
+    ];
+}
 $staffs = $pdo->query("SELECT u.user_id,u.username FROM users u JOIN roles r ON r.role_id=u.role_id WHERE r.role_code='STAFF' AND u.is_deleted=0 ORDER BY u.username")->fetchAll(PDO::FETCH_ASSOC);
 $total = count($tasks);
 $pending = count(array_filter($tasks, fn($t) => $t['status'] === 'Pending'));
@@ -29,8 +49,8 @@ $completed = count(array_filter($tasks, fn($t) => $t['status'] === 'Completed'))
 $overdue = count(array_filter($tasks, fn($t) => !empty($t['due_date']) && $t['due_date'] < date('Y-m-d') && $t['status'] !== 'Completed'));
 manager_page_head('Nhiệm vụ'); ?>
 <div class="manager-shell">
-    <?php manager_sidebar($manager, 'tasks', $sidebarProjectCount, $sidebarTaskCount, $sidebarNotifCount, $sidebarPendingApprovalCount); ?><main
-        class="manager-main-content"><?php manager_topbar('Nhiệm vụ', $manager, $sidebarNotifCount); ?>
+    <?php manager_sidebar($manager, 'tasks', $sidebarProjectCount, $sidebarTaskCount, $sidebarNotifCount, $sidebarPendingApprovalCount); ?>
+    <main class="manager-main-content"><?php manager_topbar('Nhiệm vụ', $manager, $sidebarNotifCount); ?>
         <section class="manager-content-area">
             <div class="manager-stat-row task-stat-row">
                 <div class="task-stat-card blue">
@@ -207,9 +227,13 @@ manager_page_head('Nhiệm vụ'); ?>
                     <div class="form-group full"><label>Tên nhiệm vụ</label><input name="title" required></div>
                     <div class="form-group full"><label>Mô tả</label><textarea name="description" rows="4"></textarea>
                     </div>
-                    <div class="form-group"><label>Người thực hiện</label><select name="assignee_id">
-                            <option value="">-- Chọn --</option><?php foreach ($staffs as $s): ?><option
-                                value="<?= $s['user_id'] ?>"><?= mh($s['username']) ?></option><?php endforeach; ?>
+                    <div class="form-group"><label>Người thực hiện</label><select name="assignee_id"
+                            id="add_task_assignee">
+
+                            <option value="">
+                                -- Chọn người thực hiện --
+                            </option>
+
                         </select></div>
                     <div class="form-group"><label>Ưu tiên</label><select name="priority">
                             <option>Low</option>
@@ -247,8 +271,9 @@ manager_page_head('Nhiệm vụ'); ?>
                             id="edit_task_description" rows="4"></textarea></div>
                     <div class="form-group"><label>Người thực hiện</label><select name="assignee_id"
                             id="edit_task_assignee">
-                            <option value="">-- Chọn --</option><?php foreach ($staffs as $s): ?><option
-                                value="<?= $s['user_id'] ?>"><?= mh($s['username']) ?></option><?php endforeach; ?>
+                            <option value="">
+                                -- Chọn người thực hiện --
+                            </option>
                         </select></div>
                     <div class="form-group"><label>Ưu tiên</label><select name="priority" id="edit_task_priority">
                             <option>Low</option>
@@ -488,12 +513,26 @@ manager_page_head('Nhiệm vụ'); ?>
 
 </div>
 <script>
+const projectMembers =
+    <?= json_encode($projectMembers, JSON_UNESCAPED_UNICODE) ?>;
+</script>
+<script>
 function prepareAddTask(pid) {
-    document.getElementById('add_task_project_id').value = pid;
-    openModal('addTaskModal')
+    document.getElementById("add_task_project_id").value = pid;
+    const select = document.getElementById("add_task_assignee");
+    select.innerHTML = '<option value="">-- Chọn người thực hiện --</option>';
+    if (projectMembers[pid]) {
+        projectMembers[pid].forEach(function(user) {
+            const option = document.createElement("option");
+            option.value = user.user_id;
+            option.textContent = user.username;
+            select.appendChild(option);
+        });
+    }
+    openModal("addTaskModal");
 }
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     const params = new URLSearchParams(window.location.search);
     const taskId = params.get('task_id');
     if (!taskId) return;
@@ -505,23 +544,40 @@ document.addEventListener('DOMContentLoaded', function () {
         button.click();
 
         if (params.get('focus') === 'comments') {
-            setTimeout(function () {
+            setTimeout(function() {
                 const comments = document.querySelector('#taskDetailModal .comment-header');
-                if (comments) comments.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                if (comments) comments.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
             }, 350);
         }
     }
 });
 
 function fillTaskEdit(t) {
-    document.getElementById('edit_task_id').value = t.task_id;
-    document.getElementById('edit_task_project_id').value = t.project_id;
-    document.getElementById('edit_task_title').value = t.title || '';
-    document.getElementById('edit_task_description').value = t.description || '';
-    document.getElementById('edit_task_assignee').value = t.assignee_id || '';
-    document.getElementById('edit_task_priority').value = t.priority || 'Medium';
-    document.getElementById('edit_task_due').value = t.due_date || '';
-    openModal('editTaskModal')
+    document.getElementById("edit_task_id").value = t.task_id;
+    document.getElementById("edit_task_project_id").value = t.project_id;
+    document.getElementById("edit_task_title").value = t.title || "";
+    document.getElementById("edit_task_description").value = t.description || "";
+    const select = document.getElementById("edit_task_assignee");
+    select.innerHTML = '<option value="">-- Chọn người thực hiện --</option>';
+    if (projectMembers[t.project_id]) {
+        projectMembers[t.project_id].forEach(function(user) {
+            const option = document.createElement("option");
+            option.value = user.user_id;
+            option.textContent = user.username;
+            if (user.user_id == t.assignee_id) {
+                option.selected = true;
+            }
+            select.appendChild(option);
+        });
+    }
+    document.getElementById("edit_task_priority").value =
+        t.priority || "Medium";
+    document.getElementById("edit_task_due").value =
+        t.due_date || "";
+    openModal("editTaskModal");
 }
 
 function formatDate(date) {
@@ -811,7 +867,7 @@ function openDeleteTaskModal(id) {
 
 // Cho phép nhảy thẳng vào đúng nhiệm vụ khi đến từ link thông báo (index.php?page=tasks&task_id=X):
 // bấm hộ nút "xem chi tiết" của đúng dòng task đó, tận dụng luôn dữ liệu đã render sẵn trong bảng.
-(function () {
+(function() {
     const params = new URLSearchParams(window.location.search);
     const taskId = params.get("task_id");
     if (!taskId) return;

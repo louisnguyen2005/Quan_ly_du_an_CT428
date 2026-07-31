@@ -826,7 +826,35 @@ if (in_array($action, ['managerCreateProject', 'managerUpdateProject', 'managerD
         if (!$ownProject->fetchColumn()) {
             redirect_or_json('index.php?page=tasks', false, 'Bạn không có quyền tạo nhiệm vụ cho dự án này');
         }
+        $assigneeId = ($_POST['assignee_id'] ?? '') !== ''
+            ? (int)$_POST['assignee_id']
+            : null;
 
+        if ($assigneeId !== null) {
+
+            $checkMember = $pdo->prepare("
+                SELECT 1
+                FROM project_members
+                WHERE project_id = ?
+                AND user_id = ?
+                LIMIT 1
+            ");
+
+            $checkMember->execute([
+                $projectId,
+                $assigneeId
+            ]);
+
+            if (!$checkMember->fetchColumn()) {
+
+                redirect_or_json(
+                    'index.php?page=tasks',
+                    false,
+                    'Người được giao không thuộc dự án này.'
+                );
+
+            }
+        }
         $stmt = $pdo->prepare("INSERT INTO tasks(project_id,title,description,status,priority,assignee_id,created_by,due_date,is_deleted) VALUES(?,?,?,?,?,?,?,?,0)");
         $stmt->execute([
             $projectId,
@@ -834,7 +862,7 @@ if (in_array($action, ['managerCreateProject', 'managerUpdateProject', 'managerD
             $_POST['description'] ?? '',
             'Pending',
             $_POST['priority'] ?? 'Medium',
-            ($_POST['assignee_id'] ?? '') !== '' ? (int)$_POST['assignee_id'] : null,
+            $assigneeId,
             $managerId,
             $_POST['due_date'] ?? null
         ]);
@@ -870,14 +898,37 @@ if (in_array($action, ['managerCreateProject', 'managerUpdateProject', 'managerD
 
     if ($action === 'managerUpdateTask') {
         $taskId = (int)($_POST['task_id'] ?? 0);
-
+        $projectId = (int)$_POST['project_id'];
+        $assigneeId = ($_POST['assignee_id'] ?? '') !== ''
+            ? (int)$_POST['assignee_id']
+            : null;
+        if ($assigneeId !== null) {
+            $checkMember = $pdo->prepare("
+                SELECT 1
+                FROM project_members
+                WHERE project_id=?
+                AND user_id=?
+                LIMIT 1
+            ");
+            $checkMember->execute([
+                $projectId,
+                $assigneeId
+            ]);
+            if (!$checkMember->fetchColumn()) {
+                redirect_or_json(
+                    'index.php?page=tasks',
+                    false,
+                    'Người thực hiện không thuộc dự án.'
+                );
+            }
+        }
         $stmt = $pdo->prepare("UPDATE tasks t JOIN projects p ON p.project_id=t.project_id SET t.project_id=?, t.title=?, t.description=?, t.priority=?, t.assignee_id=?, t.due_date=? WHERE t.task_id=? AND t.is_deleted=0 AND p.manager_id=?");
         $stmt->execute([
-            (int)$_POST['project_id'],
+            $projectId,
             $_POST['title'] ?? '',
             $_POST['description'] ?? '',
             $_POST['priority'] ?? 'Medium',
-            ($_POST['assignee_id'] ?? '') !== '' ? (int)$_POST['assignee_id'] : null,
+            $assigneeId,
             $_POST['due_date'] ?? null,
             $taskId,
             $managerId
